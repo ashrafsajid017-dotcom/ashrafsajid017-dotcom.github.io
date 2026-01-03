@@ -18,6 +18,7 @@
       text-align: center;
       overflow: hidden;
       padding: 20px;
+      position: relative;
     }
 
     h1 {
@@ -58,8 +59,8 @@
 
     #letter {
       position: relative;
-      top: -100px; /* hidden above envelope */
       opacity: 0;
+      transform: scale(0.7);
       background: #f8fafc;
       color: #0f172a;
       padding: 20px;
@@ -67,14 +68,29 @@
       max-width: 90%;
       font-size: 16px;
       box-shadow: 0 0 20px #22c55e;
-      transition: top 1s ease, opacity 1s ease;
+      transition: all 1s ease;
+      white-space: pre-line;
+      min-height: 100px;
       z-index: 1;
-      white-space: pre-line; /* preserve line breaks */
     }
 
     .letter-show {
-      top: 20px; /* slide down */
       opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Confetti styles */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #f59e0b;
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      animation: confettiFall 2s forwards;
+      border-radius: 50%;
+      pointer-events: none;
     }
 
     @keyframes shake {
@@ -85,6 +101,11 @@
     @keyframes bounce {
       0% { transform: translateY(0); }
       100% { transform: translateY(-20px); }
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translate(0,0) rotate(0deg); opacity: 1;}
+      100% { transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px)) rotate(720deg); opacity: 0;}
     }
 
     /* Mobile tweaks */
@@ -115,7 +136,7 @@
   </div>
 
   <!-- Audio -->
-  <audio id="music" src="song.mp3"></audio>
+  <audio id="music" src="song.mp3" preload="auto"></audio>
 
   <script>
     let noCount = 0;
@@ -150,12 +171,43 @@
     }
 
     function openLetter() {
+      // Play music with fade-in
+      music.volume = 0;
+      music.play().catch(e => console.log("Autoplay blocked"));
+      let vol = 0;
+      const fadeIn = setInterval(() => {
+        if(vol < 1){
+          vol += 0.05;
+          music.volume = vol;
+        } else clearInterval(fadeIn);
+      }, 100);
+
+      // Show letter
       letter.classList.add('letter-show');
 
-      // Play music
-      music.play().catch(e => console.log("Autoplay blocked"));
+      // Create confetti
+      for(let i=0;i<30;i++){
+        const c = document.createElement('div');
+        c.classList.add('confetti');
+        c.style.setProperty('--x', (Math.random()*400-200));
+        c.style.setProperty('--y', (Math.random()*400-200));
+        c.style.background = `hsl(${Math.random()*360}, 70%, 60%)`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),2000);
+      }
+
+      // Wiggle envelope
+      const env = document.getElementById('envelope');
+      env.animate([
+        { transform: 'rotate(-10deg)' },
+        { transform: 'rotate(10deg)' },
+        { transform: 'rotate(0deg)' }
+      ], { duration: 600, iterations: 1 });
     }
   </script>
+
+</body>
+</html>
 
 </body>
 </html>
