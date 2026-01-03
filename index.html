@@ -37,22 +37,14 @@
       transition: transform 0.2s;
     }
 
-    #yes {
-      background: #22c55e;
-      color: black;
-    }
-
-    #no {
-      background: #ef4444;
-      color: white;
-      position: relative;
-    }
+    #yes { background: #22c55e; color: black; }
+    #no { background: #ef4444; color: white; position: relative; }
 
     #envelope {
       font-size: 90px;
       cursor: pointer;
       margin-top: 20px;
-      position: relative;
+      display: none; /* hidden initially */
       z-index: 2;
       animation: bounce 1s infinite alternate;
     }
@@ -79,36 +71,23 @@
       transform: scale(1);
     }
 
-    /* Confetti styles */
+    /* Confetti */
     .confetti {
       position: absolute;
       width: 8px;
       height: 8px;
-      background: #f59e0b;
-      top: 50%;
-      left: 50%;
-      opacity: 0;
-      animation: confettiFall 2s forwards;
       border-radius: 50%;
       pointer-events: none;
+      animation: confettiFall 2s forwards;
     }
 
-    @keyframes shake {
-      0% { transform: rotate(-2deg); }
-      100% { transform: rotate(2deg); }
-    }
-
-    @keyframes bounce {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-20px); }
-    }
-
+    @keyframes shake { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
+    @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
     @keyframes confettiFall {
-      0% { transform: translate(0,0) rotate(0deg); opacity: 1;}
-      100% { transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px)) rotate(720deg); opacity: 0;}
+      0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; }
     }
 
-    /* Mobile tweaks */
     @media (max-width: 480px) {
       h1 { font-size: 1.8em; }
       button { font-size: 14px; padding: 10px 20px; }
@@ -135,24 +114,24 @@
     </div>
   </div>
 
-  <!-- Audio -->
   <audio id="music" src="song.mp3" preload="auto"></audio>
 
   <script>
     let noCount = 0;
     const music = document.getElementById('music');
     const letter = document.getElementById('letter');
+    const envelope = document.getElementById('envelope');
 
     function moveNo() {
       const noBtn = document.getElementById("no");
       noCount++;
 
-      if (noCount === 2) {
+      if(noCount === 2){
         noBtn.innerText = "Seriously? 😩";
         noBtn.style.background = "#f59e0b";
       }
 
-      if (noCount === 4) {
+      if(noCount === 4){
         noBtn.innerText = "Okay… fine 😔";
         noBtn.style.background = "#ef4444";
         noBtn.onclick = yesClicked;
@@ -167,42 +146,39 @@
 
     function yesClicked() {
       document.getElementById("stage1").style.display = "none";
-      document.getElementById("envelope").style.display = "block";
+      envelope.style.display = "block"; // show envelope
     }
 
     function openLetter() {
+      // Show letter
+      letter.classList.add('letter-show');
+
       // Play music with fade-in
       music.volume = 0;
       music.play().catch(e => console.log("Autoplay blocked"));
       let vol = 0;
-      const fadeIn = setInterval(() => {
-        if(vol < 1){
-          vol += 0.05;
-          music.volume = vol;
-        } else clearInterval(fadeIn);
+      const fade = setInterval(() => {
+        if(vol < 1){ vol += 0.05; music.volume = vol; } 
+        else clearInterval(fade);
       }, 100);
 
-      // Show letter
-      letter.classList.add('letter-show');
-
-      // Create confetti
-      for(let i=0;i<30;i++){
-        const c = document.createElement('div');
-        c.classList.add('confetti');
-        c.style.setProperty('--x', (Math.random()*400-200));
-        c.style.setProperty('--y', (Math.random()*400-200));
-        c.style.background = `hsl(${Math.random()*360}, 70%, 60%)`;
-        document.body.appendChild(c);
-        setTimeout(()=>c.remove(),2000);
-      }
-
       // Wiggle envelope
-      const env = document.getElementById('envelope');
-      env.animate([
+      envelope.animate([
         { transform: 'rotate(-10deg)' },
         { transform: 'rotate(10deg)' },
         { transform: 'rotate(0deg)' }
       ], { duration: 600, iterations: 1 });
+
+      // Confetti
+      for(let i=0;i<30;i++){
+        const c = document.createElement('div');
+        c.classList.add('confetti');
+        c.style.setProperty('--x', (Math.random()*400-200)+'px');
+        c.style.setProperty('--y', (Math.random()*400-200)+'px');
+        c.style.background = `hsl(${Math.random()*360},70%,60%)`;
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),2000);
+      }
     }
   </script>
 
