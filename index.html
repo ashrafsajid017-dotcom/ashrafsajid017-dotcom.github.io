@@ -1,150 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Are You Mad?</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #0f172a;
-      color: #e5e7eb;
-      font-family: "Comic Sans MS", Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<title>MAAF KARDO MEW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0f172a;
+    color: #e5e7eb;
+    font-family: "Comic Sans MS", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 20px;
+    position: relative;
+  }
 
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      animation: shake 1.5s infinite alternate;
-    }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+  }
 
-    button {
-      padding: 12px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin: 8px;
-      transition: transform 0.2s;
-    }
+  button {
+    padding: 12px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 8px;
+    transition: transform 0.2s;
+    position: relative;
+  }
 
-    #yes { background: #22c55e; color: black; }
-    #no { background: #ef4444; color: white; position: relative; }
+  #yes { background: #22c55e; color: black; }
+  #no { background: #ef4444; color: white; }
 
-    #envelope {
-      display: none;
-      font-size: 90px;
-      cursor: pointer;
-      margin-top: 20px;
-      animation: bounce 1s infinite alternate;
-    }
+  #envelope {
+    display: none;
+    font-size: 90px;
+    cursor: pointer;
+    margin-top: 20px;
+    animation: bounce 1s infinite alternate;
+  }
 
-    #letter {
-      display: none;
-      background: #f8fafc;
-      color: #0f172a;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 90%;
-      font-size: 16px;
-      box-shadow: 0 0 20px #22c55e;
-      animation: fadeIn 1.2s ease-in-out;
-      white-space: pre-line;
-      min-height: 120px;
-      margin-top: 15px;
-    }
+  #letter {
+    display: none;
+    background: #f8fafc;
+    color: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 90%;
+    font-size: 16px;
+    box-shadow: 0 0 20px #22c55e;
+    animation: fadeIn 1.2s ease-in-out;
+    white-space: pre-line;
+    min-height: 120px;
+    margin-top: 15px;
+  }
 
-    @keyframes shake {
-      0% { transform: rotate(-2deg); }
-      100% { transform: rotate(2deg); }
-    }
+  @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
-    @keyframes bounce {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-20px); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 1.8em; }
-      button { font-size: 14px; padding: 10px 20px; }
-      #envelope { font-size: 70px; }
-      #letter { font-size: 14px; padding: 15px; }
-    }
-  </style>
+  @media (max-width: 480px) {
+    h1 { font-size: 1.8em; }
+    button { font-size: 14px; padding: 10px 20px; }
+    #envelope { font-size: 70px; }
+    #letter { font-size: 14px; padding: 15px; }
+  }
+</style>
 </head>
 <body>
 
-  <div id="stage1">
-    <h1>Are you mad at me? 😰</h1>
-    <button id="yes" onclick="yesClicked()">Yes… 😭</button>
-    <button id="no" onmouseover="moveNo()">Nooooo 😡</button>
-  </div>
+<div id="stage1">
+  <h1>Are you mad at me?</h1>
+  <button id="yes" onclick="yesClicked()">Yes</button>
+  <button id="no" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
+</div>
 
-  <div id="stage2">
-    <div id="envelope" onclick="openLetter()">✉️📬</div>
-    <div id="letter"></div>
-  </div>
-
-  <audio id="music" src="song.mp3"></audio>
-
-  <script>
-    let noCount = 0;
-    const music = document.getElementById('music');
-
-    function moveNo() {
-      const noBtn = document.getElementById("no");
-      noCount++;
-
-      if (noCount === 2) {
-        noBtn.innerText = "Seriously? 😩";
-        noBtn.style.background = "#f59e0b";
-      }
-
-      if (noCount === 4) {
-        noBtn.innerText = "Okay… fine 😔";
-        noBtn.style.background = "#ef4444";
-        noBtn.onclick = yesClicked;
-        noBtn.style.transform = "rotate(10deg) scale(1.2)";
-        return;
-      }
-
-      const x = Math.random() * 300 - 150;
-      const y = Math.random() * 300 - 150;
-      noBtn.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random()*30-15}deg)`;
-    }
-
-    function yesClicked() {
-      document.getElementById("stage1").style.display = "none";
-      document.getElementById("envelope").style.display = "block";
-    }
-
-    function openLetter() {
-      const letter = document.getElementById("letter");
-      letter.style.display = "block";
-
-      // Play music
-      music.play().catch(e => console.log("Autoplay blocked"));
-
-      // Insert your full apology
-      letter.innerHTML = `dekho mew i'm very sorry for what happened yesterday 
+<div id="stage2">
+  <div id="envelope" onclick="openLetter()">✉️</div>
+  <div id="letter">
+    dekho mew i'm very sorry for what happened yesterday 
 ik what i have done is very fucked up but amar asholei 
 mone chilo na i hope u will feel a lil better now c'mon 
-yaar koto koshto korsi ab naraz mat rahooo`;
-    }
-  </script>
+yaar koto koshto korsi ab naraz mat rahooo
+  </div>
+</div>
+
+<audio id="music" src="song.mp3"></audio>
+
+<script>
+const noBtn = document.getElementById("no");
+
+function moveNo() {
+  // viewport minus button size
+  const vw = window.innerWidth - noBtn.offsetWidth - 20;
+  const vh = window.innerHeight - noBtn.offsetHeight - 20;
+
+  const x = Math.random() * vw;
+  const y = Math.random() * vh;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+}
+
+function yesClicked() {
+  document.getElementById("stage1").style.display = "none";
+  document.getElementById("envelope").style.display = "block";
+}
+
+function openLetter() {
+  const letter = document.getElementById("letter");
+  letter.style.display = "block";
+
+  const music = document.getElementById("music");
+  music.play().catch(e => console.log("Autoplay blocked"));
+}
+</script>
 
 </body>
 </html>
+
