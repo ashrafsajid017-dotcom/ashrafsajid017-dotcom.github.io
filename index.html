@@ -36,16 +36,8 @@
       transition: transform 0.2s;
     }
 
-    #yes {
-      background: #22c55e;
-      color: black;
-    }
-
-    #no {
-      background: #ef4444;
-      color: white;
-      position: relative;
-    }
+    #yes { background: #22c55e; color: black; }
+    #no { background: #ef4444; color: white; position: relative; }
 
     #envelope {
       display: none;
@@ -65,7 +57,9 @@
       font-size: 16px;
       box-shadow: 0 0 20px #22c55e;
       animation: fadeIn 1.2s ease-in-out;
-      min-height: 100px; /* space for your apology */
+      white-space: pre-line;
+      min-height: 120px;
+      margin-top: 15px;
     }
 
     @keyframes shake {
@@ -83,7 +77,6 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Mobile tweaks */
     @media (max-width: 480px) {
       h1 { font-size: 1.8em; }
       button { font-size: 14px; padding: 10px 20px; }
@@ -102,12 +95,9 @@
 
   <div id="stage2">
     <div id="envelope" onclick="openLetter()">✉️📬</div>
-    <div id="letter">
-      <!-- Your apology goes here -->
-    </div>
+    <div id="letter"></div>
   </div>
 
-  <!-- Audio -->
   <audio id="music" src="song.mp3"></audio>
 
   <script>
@@ -138,8 +128,7 @@
 
     function yesClicked() {
       document.getElementById("stage1").style.display = "none";
-      const env = document.getElementById("envelope");
-      env.style.display = "block";
+      document.getElementById("envelope").style.display = "block";
     }
 
     function openLetter() {
@@ -149,13 +138,13 @@
       // Play music
       music.play().catch(e => console.log("Autoplay blocked"));
 
-      // Replace previous line with your dramatic text
-      const apology = document.createElement("p");
-      apology.innerHTML = "I’m sorry mewww 💖";
-      letter.appendChild(apology);
+      // Insert your full apology
+      letter.innerHTML = `dekho mew i'm very sorry for what happened yesterday 
+ik what i have done is very fucked up but amar asholei 
+mone chilo na i hope u will feel a lil better now c'mon 
+yaar koto koshto korsi ab naraz mat rahooo`;
     }
   </script>
 
 </body>
 </html>
-
