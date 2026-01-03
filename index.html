@@ -18,7 +18,6 @@
       text-align: center;
       overflow: hidden;
       padding: 20px;
-      position: relative;
     }
 
     h1 {
@@ -37,22 +36,27 @@
       transition: transform 0.2s;
     }
 
-    #yes { background: #22c55e; color: black; }
-    #no { background: #ef4444; color: white; position: relative; }
+    #yes {
+      background: #22c55e;
+      color: black;
+    }
+
+    #no {
+      background: #ef4444;
+      color: white;
+      position: relative;
+    }
 
     #envelope {
+      display: none;
       font-size: 90px;
       cursor: pointer;
       margin-top: 20px;
-      display: none; /* hidden initially */
-      z-index: 2;
       animation: bounce 1s infinite alternate;
     }
 
     #letter {
-      position: relative;
-      opacity: 0;
-      transform: scale(0.7);
+      display: none;
       background: #f8fafc;
       color: #0f172a;
       padding: 20px;
@@ -60,34 +64,26 @@
       max-width: 90%;
       font-size: 16px;
       box-shadow: 0 0 20px #22c55e;
-      transition: all 1s ease;
-      white-space: pre-line;
-      min-height: 100px;
-      z-index: 1;
+      animation: fadeIn 1.2s ease-in-out;
+      min-height: 100px; /* space for your apology */
     }
 
-    .letter-show {
-      opacity: 1;
-      transform: scale(1);
+    @keyframes shake {
+      0% { transform: rotate(-2deg); }
+      100% { transform: rotate(2deg); }
     }
 
-    /* Confetti */
-    .confetti {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      pointer-events: none;
-      animation: confettiFall 2s forwards;
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
     }
 
-    @keyframes shake { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
-    @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
-    @keyframes confettiFall {
-      0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
-      100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
+    /* Mobile tweaks */
     @media (max-width: 480px) {
       h1 { font-size: 1.8em; }
       button { font-size: 14px; padding: 10px 20px; }
@@ -107,31 +103,27 @@
   <div id="stage2">
     <div id="envelope" onclick="openLetter()">✉️📬</div>
     <div id="letter">
-      dekho mew i'm very sorry for what happened yesterday 
-      ik what i have done is very fucked up but amar asholei 
-      mone chilo na i hope u will feel a lil better now c'mon 
-      yaar koto koshto korsi ab naraz mat rahooo
+      <!-- Your apology goes here -->
     </div>
   </div>
 
-  <audio id="music" src="song.mp3" preload="auto"></audio>
+  <!-- Audio -->
+  <audio id="music" src="song.mp3"></audio>
 
   <script>
     let noCount = 0;
     const music = document.getElementById('music');
-    const letter = document.getElementById('letter');
-    const envelope = document.getElementById('envelope');
 
     function moveNo() {
       const noBtn = document.getElementById("no");
       noCount++;
 
-      if(noCount === 2){
+      if (noCount === 2) {
         noBtn.innerText = "Seriously? 😩";
         noBtn.style.background = "#f59e0b";
       }
 
-      if(noCount === 4){
+      if (noCount === 4) {
         noBtn.innerText = "Okay… fine 😔";
         noBtn.style.background = "#ef4444";
         noBtn.onclick = yesClicked;
@@ -146,44 +138,24 @@
 
     function yesClicked() {
       document.getElementById("stage1").style.display = "none";
-      envelope.style.display = "block"; // show envelope
+      const env = document.getElementById("envelope");
+      env.style.display = "block";
     }
 
     function openLetter() {
-      // Show letter
-      letter.classList.add('letter-show');
+      const letter = document.getElementById("letter");
+      letter.style.display = "block";
 
-      // Play music with fade-in
-      music.volume = 0;
+      // Play music
       music.play().catch(e => console.log("Autoplay blocked"));
-      let vol = 0;
-      const fade = setInterval(() => {
-        if(vol < 1){ vol += 0.05; music.volume = vol; } 
-        else clearInterval(fade);
-      }, 100);
 
-      // Wiggle envelope
-      envelope.animate([
-        { transform: 'rotate(-10deg)' },
-        { transform: 'rotate(10deg)' },
-        { transform: 'rotate(0deg)' }
-      ], { duration: 600, iterations: 1 });
-
-      // Confetti
-      for(let i=0;i<30;i++){
-        const c = document.createElement('div');
-        c.classList.add('confetti');
-        c.style.setProperty('--x', (Math.random()*400-200)+'px');
-        c.style.setProperty('--y', (Math.random()*400-200)+'px');
-        c.style.background = `hsl(${Math.random()*360},70%,60%)`;
-        document.body.appendChild(c);
-        setTimeout(()=>c.remove(),2000);
-      }
+      // Replace previous line with your dramatic text
+      const apology = document.createElement("p");
+      apology.innerHTML = "I’m sorry mewww 💖";
+      letter.appendChild(apology);
     }
   </script>
 
 </body>
 </html>
 
-</body>
-</html>
