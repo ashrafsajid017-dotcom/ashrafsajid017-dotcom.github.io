@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MAAF KARDO MEW</title>
+<title>Are You Mad?</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
@@ -61,6 +61,8 @@
     white-space: pre-line;
     min-height: 120px;
     margin-top: 15px;
+    position: relative;
+    z-index: 1;
   }
 
   @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
@@ -76,12 +78,14 @@
 </head>
 <body>
 
+<!-- Stage 1: Question -->
 <div id="stage1">
   <h1>Are you mad at me?</h1>
   <button id="yes" onclick="yesClicked()">Yes</button>
   <button id="no" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
 </div>
 
+<!-- Stage 2: Envelope & Letter -->
 <div id="stage2">
   <div id="envelope" onclick="openLetter()">✉️</div>
   <div id="letter">
@@ -92,13 +96,14 @@ yaar koto koshto korsi ab naraz mat rahooo
   </div>
 </div>
 
+<!-- Audio -->
 <audio id="music" src="song.mp3"></audio>
 
 <script>
 const noBtn = document.getElementById("no");
 
+// No button always evades
 function moveNo() {
-  // viewport minus button size
   const vw = window.innerWidth - noBtn.offsetWidth - 20;
   const vh = window.innerHeight - noBtn.offsetHeight - 20;
 
@@ -110,20 +115,52 @@ function moveNo() {
   noBtn.style.top = `${y}px`;
 }
 
+// Show envelope after Yes
 function yesClicked() {
   document.getElementById("stage1").style.display = "none";
   document.getElementById("envelope").style.display = "block";
 }
 
+// Show letter, play music, hearts float
 function openLetter() {
   const letter = document.getElementById("letter");
   letter.style.display = "block";
 
+  // Play music
   const music = document.getElementById("music");
   music.play().catch(e => console.log("Autoplay blocked"));
+
+  // Generate hearts
+  createHearts();
+}
+
+// Function to generate floating hearts
+function createHearts() {
+  for (let i = 0; i < 25; i++) {
+    const heart = document.createElement('div');
+    heart.innerText = '❤️';
+    heart.style.position = 'absolute';
+    heart.style.left = (window.innerWidth/2 + (Math.random()*200-100)) + 'px';
+    heart.style.top = (window.innerHeight/1.5) + 'px';
+    heart.style.fontSize = (Math.random()*20 + 20) + 'px';
+    heart.style.opacity = 1;
+    heart.style.pointerEvents = 'none';
+    document.body.appendChild(heart);
+
+    const animDuration = Math.random()*2 + 3; // 3-5 seconds
+    heart.animate([
+      { transform: `translateY(0)`, opacity: 1 },
+      { transform: `translateY(-${300 + Math.random()*200}px)`, opacity: 0 }
+    ], {
+      duration: animDuration * 1000,
+      iterations: 1,
+      easing: 'ease-out'
+    });
+
+    setTimeout(() => heart.remove(), animDuration*1000);
+  }
 }
 </script>
 
 </body>
 </html>
-
