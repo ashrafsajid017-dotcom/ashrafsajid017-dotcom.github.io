@@ -58,9 +58,8 @@
 
     #letter {
       position: relative;
-      top: -50px; /* hidden above the envelope */
+      top: -100px; /* hidden above envelope */
       opacity: 0;
-      display: block;
       background: #f8fafc;
       color: #0f172a;
       padding: 20px;
@@ -69,12 +68,12 @@
       font-size: 16px;
       box-shadow: 0 0 20px #22c55e;
       transition: top 1s ease, opacity 1s ease;
-      min-height: 100px; /* space for your apology */
       z-index: 1;
+      white-space: pre-line; /* preserve line breaks */
     }
 
     .letter-show {
-      top: 20px; /* slides down */
+      top: 20px; /* slide down */
       opacity: 1;
     }
 
@@ -112,8 +111,6 @@
       ik what i have done is very fucked up but amar asholei 
       mone chilo na i hope u will feel a lil better now c'mon 
       yaar koto koshto korsi ab naraz mat rahooo
-      <!-- Your apology goes here-->
-      <p>I’m sorry mewww </p>
     </div>
   </div>
 
@@ -149,8 +146,7 @@
 
     function yesClicked() {
       document.getElementById("stage1").style.display = "none";
-      const env = document.getElementById("envelope");
-      env.style.display = "block";
+      document.getElementById("envelope").style.display = "block";
     }
 
     function openLetter() {
