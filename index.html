@@ -9,20 +9,28 @@
       height: 100vh;
       background: #0f172a;
       color: #e5e7eb;
-      font-family: Arial, sans-serif;
+      font-family: "Comic Sans MS", Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      animation: shake 1s infinite alternate;
     }
 
     button {
-      padding: 12px 24px;
+      padding: 14px 28px;
       font-size: 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       margin: 10px;
+      transition: transform 0.2s;
     }
 
     #yes {
@@ -38,39 +46,56 @@
 
     #envelope {
       display: none;
-      font-size: 80px;
+      font-size: 100px;
       cursor: pointer;
       margin-top: 20px;
+      animation: bounce 1s infinite alternate;
     }
 
     #letter {
       display: none;
       background: #f8fafc;
       color: #0f172a;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 300px;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 350px;
       margin-top: 15px;
-      font-size: 15px;
+      font-size: 16px;
+      box-shadow: 0 0 15px #22c55e;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(-2deg); }
+      100% { transform: rotate(2deg); }
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
   <div id="stage1">
-    <h1>Are you mad?</h1>
-    <button id="yes" onclick="yesClicked()">Yes</button>
-    <button id="no" onmouseover="moveNo()">No</button>
+    <h1>Are you mad at me? 😰</h1>
+    <button id="yes" onclick="yesClicked()">Yes, unfortunately 😭</button>
+    <button id="no" onmouseover="moveNo()">Nooooo 😡</button>
   </div>
 
   <div id="stage2">
-    <div id="envelope" onclick="openLetter()">✉️</div>
+    <div id="envelope" onclick="openLetter()">✉️📬</div>
     <div id="letter">
-      I’ll be honest — I fumbled yesterday.<br><br>
-      I wasn’t trying to complicate things or make you uncomfortable.
-      I just handled it poorly, and I’m sorry for that.<br><br>
-      No pressure, no expectations.
-      Just wanted you to know I meant well.
+      💌 Okay… deep breath… I admit it.<br><br>
+      Yesterday I fumbled HARD. Like, Olympic-level fumble. 😅<br><br>
+      I wasn’t trying to mess things up or make you feel weird. I just… well, I flopped.<br><br>
+      No pressure. No stress. Just a tiny, dramatic apology from me 💖.
     </div>
   </div>
 
@@ -81,15 +106,23 @@
       const noBtn = document.getElementById("no");
       noCount++;
 
-      if (noCount > 4) {
-        noBtn.innerText = "Okay fine… Yes 😔";
+      if (noCount === 3) {
+        noBtn.innerText = "Seriously? 😩";
+        noBtn.style.background = "#f59e0b";
+      }
+
+      if (noCount === 5) {
+        noBtn.innerText = "Fine… 😔";
+        noBtn.style.background = "#ef4444";
         noBtn.onclick = yesClicked;
+        noBtn.style.transform = "rotate(10deg) scale(1.2)";
         return;
       }
 
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 200 - 100;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      // Random dodge
+      const x = Math.random() * 300 - 150;
+      const y = Math.random() * 300 - 150;
+      noBtn.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random()*30-15}deg)`;
     }
 
     function yesClicked() {
@@ -99,9 +132,14 @@
     }
 
     function openLetter() {
-      document.getElementById("letter").style.display = "block";
+      const letter = document.getElementById("letter");
+      letter.style.display = "block";
+      letter.innerHTML += "<br><br>🎭 Dramatic enough? I hope it made you smile!";
     }
   </script>
+
+</body>
+</html>
 
 </body>
 </html>
