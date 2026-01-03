@@ -48,15 +48,19 @@
     }
 
     #envelope {
-      display: none;
       font-size: 90px;
       cursor: pointer;
       margin-top: 20px;
+      position: relative;
+      z-index: 2;
       animation: bounce 1s infinite alternate;
     }
 
     #letter {
-      display: none;
+      position: relative;
+      top: -50px; /* hidden above the envelope */
+      opacity: 0;
+      display: block;
       background: #f8fafc;
       color: #0f172a;
       padding: 20px;
@@ -64,7 +68,14 @@
       max-width: 90%;
       font-size: 16px;
       box-shadow: 0 0 20px #22c55e;
-      animation: fadeIn 1.2s ease-in-out;
+      transition: top 1s ease, opacity 1s ease;
+      min-height: 100px; /* space for your apology */
+      z-index: 1;
+    }
+
+    .letter-show {
+      top: 20px; /* slides down */
+      opacity: 1;
     }
 
     @keyframes shake {
@@ -75,11 +86,6 @@
     @keyframes bounce {
       0% { transform: translateY(0); }
       100% { transform: translateY(-20px); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
     }
 
     /* Mobile tweaks */
@@ -102,11 +108,12 @@
   <div id="stage2">
     <div id="envelope" onclick="openLetter()">✉️📬</div>
     <div id="letter">
-      💌 Alright… here it is. Full honesty.<br><br>
-      Yesterday I fumbled HARD. Like, Olympic-level fumble. 😅<br>
-      I wasn’t trying to mess things up or make you uncomfortable.<br>
-      I just… handled it poorly. And I’m sorry.<br><br>
-      No pressure. No stress. Just a tiny, dramatic apology 💖.
+      dekho mew i'm very sorry for what happened yesterday 
+      ik what i have done is very fucked up but amar asholei 
+      mone chilo na i hope u will feel a lil better now c'mon 
+      yaar koto koshto korsi ab naraz mat rahooo
+      <!-- Your apology goes here-->
+      <p>I’m sorry mewww </p>
     </div>
   </div>
 
@@ -116,6 +123,7 @@
   <script>
     let noCount = 0;
     const music = document.getElementById('music');
+    const letter = document.getElementById('letter');
 
     function moveNo() {
       const noBtn = document.getElementById("no");
@@ -146,16 +154,10 @@
     }
 
     function openLetter() {
-      const letter = document.getElementById("letter");
-      letter.style.display = "block";
+      letter.classList.add('letter-show');
 
-      // Play music when envelope opens
-      music.play().catch(e => {
-        // Some mobile browsers block autoplay; ignore errors
-        console.log("Autoplay blocked, will play on user gesture.");
-      });
-
-      letter.innerHTML += "<br><br>🎭 Dramatic enough? Hope it made you smile!";
+      // Play music
+      music.play().catch(e => console.log("Autoplay blocked"));
     }
   </script>
 
